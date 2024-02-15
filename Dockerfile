@@ -16,5 +16,4 @@ ARG RAILWAY_STATIC_URL
 ARG PUBLIC_URL
 ARG PORT
 RUN pnpm install --frozen-lockfile --production
-RUN npm install dotenv --save
 CMD ["npm", "start"]
