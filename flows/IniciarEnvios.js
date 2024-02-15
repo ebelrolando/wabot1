@@ -12,7 +12,7 @@ const googleSheet = new GoogleSheetService(
 const regexMenu = `/^#send all$/i`;
 
 export const IniciarEnvios = bot .addKeyword(regexMenu, {regex: true})
-  .addAction(async (ctx, { flowDynamic, provider, endFlow }) => {   
+  .addAction(async (ctx, { flowDynamic, provider, endFlow, globalState }) => {   
 
     await sendReaction(provider, ctx, "🤖");
 
@@ -24,10 +24,15 @@ export const IniciarEnvios = bot .addKeyword(regexMenu, {regex: true})
         const allGroups = await googleSheet.getAllRowsBySheetName(row.Grupos);
         await flowDynamic(`Iniciando Envios a *${allGroups.length}* Grupos`);
         for (const group of allGroups) {
-        
-            await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
 
-            await delay(row.Delay);
+          const currentGlobalState = globalState.getMyState();
+          if (currentGlobalState.encendido) {
+            await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
+          } else {
+            await flowDynamic("envio cancelado 🚫");
+            await endflow();
+          }
+          await delay(row.Delay);
     
           }          
       }

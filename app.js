@@ -7,6 +7,7 @@ import MockAdapter from "@bot-whatsapp/database/json";
 import { IniciarEnvios } from "./flows/IniciarEnvios.js";
 import { EnviosUnitarios } from "./flows/EnviosUnitarios.js";
 import { ExtraerGrupos } from "./flows/ExtraerGrupos.js";
+import { Apagar } from "./flows/apagar.js";
 
 
 
@@ -15,7 +16,8 @@ const main = async () => {
   const adapterFlow = bot.createFlow([
     IniciarEnvios,
     EnviosUnitarios,
-    ExtraerGrupos
+    ExtraerGrupos,
+    Apagar
   ]);
   const adapterProvider = bot.createProvider(BaileysProvider);
 
