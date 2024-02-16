@@ -33,7 +33,7 @@ export const EnviosUnitarios = bot.addKeyword("#send one")
           if (fila.Imagen) {
             await provider.sendMedia(group.JID, fila.Imagen, fila.Mensaje);
           } else {
-            await provider.sendMessage(group.JID, fila.Mensaje);
+            await provider.sendText(group.JID, fila.Mensaje);
           }
         } else if (Data[0] === 'OFF') {
           await flowDynamic("*Envios Apagado*");

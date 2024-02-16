@@ -29,7 +29,7 @@ export const IniciarEnvios = bot.addKeyword(regexMenu, { regex: true })
         if (row.Imagen) {
           await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
         } else {
-          await provider.sendMessage(group.JID, row.Mensaje);
+          await provider.sendText(group.JID, row.Mensaje);
         }
         } else if (Data[0] === 'OFF') {
           await flowDynamic("*Envios Apagado*");
