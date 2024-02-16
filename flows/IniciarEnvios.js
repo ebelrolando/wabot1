@@ -21,20 +21,13 @@ export const IniciarEnvios = bot.addKeyword(regexMenu, { regex: true })
       const allGroups = await googleSheet.getAllRowsBySheetName(row.Grupos);
       await flowDynamic(`Iniciando Envios a *${allGroups.length}* Grupos`);
       for (const group of allGroups) {
-
-        const Data = await googleSheet.searchAndReturnFirstRow("OFF");
-
-          if (Data[0] === 'ON') {
           
         if (row.Imagen) {
           await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
         } else {
           await provider.sendText(group.JID, row.Mensaje);
         }
-        } else if (Data[0] === 'OFF') {
-          await flowDynamic("*Envios Apagado*");
-          await endFlow();
-        }
+
 
 
         await delay(row.Delay);

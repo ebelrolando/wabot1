@@ -27,18 +27,12 @@ export const EnviosUnitarios = bot.addKeyword("#send one")
 
         for (const group of allGroups) {
 
-          const Data = await googleSheet.searchAndReturnFirstRow("OFF");
-
-          if (Data[0] === 'ON') {
           if (fila.Imagen) {
             await provider.sendMedia(group.JID, fila.Imagen, fila.Mensaje);
           } else {
             await provider.sendText(group.JID, fila.Mensaje);
           }
-        } else if (Data[0] === 'OFF') {
-          await flowDynamic("*Envios Apagado*");
-          await endFlow();
-        }
+
           
 
         }
