@@ -180,7 +180,32 @@ class GoogleSheetService {
   
     return addedOrders;
   };
+ 
   
+  searchAndReturnFirstRow = async (sheetName) => {
+    try {
+      await this.doc.loadInfo();
+      const sheet = this.doc.sheetsByTitle[sheetName];
+      
+      if (!sheet) {
+        console.log(`No se encontró la hoja con el nombre '${sheetName}'.`);
+        return null;
+      }
+  
+      const rows = await sheet.getRows({ limit: 1 }); // Obtener la primera fila
+  
+      if (rows.length >= 1) { // Verificar si hay al menos una fila en la hoja
+        const firstRow = rows[0];
+        return firstRow._rawData; // Devolver los datos de la primera fila
+      } else {
+        return null; // Retorna null si no hay filas en la hoja
+      }
+    } catch (err) {
+      console.log("Error:", err);
+      return null;
+    }
+  };
+
   /**
    * 
    * @param {*} data
