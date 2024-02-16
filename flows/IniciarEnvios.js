@@ -25,13 +25,8 @@ export const IniciarEnvios = bot .addKeyword(regexMenu, {regex: true})
         await flowDynamic(`Iniciando Envios a *${allGroups.length}* Grupos`);
         for (const group of allGroups) {
 
-          const currentGlobalState = globalState.getMyState();
-          if (currentGlobalState.encendido) {
             await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
-          } else {
-            await flowDynamic("envio cancelado 🚫");
-            await endflow();
-          }
+
           await delay(row.Delay);
     
           }          

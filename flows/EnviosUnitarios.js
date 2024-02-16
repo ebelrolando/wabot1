@@ -27,13 +27,8 @@ export const EnviosUnitarios = bot.addKeyword("#send one")
 
         for (const group of allGroups) {
 
-          const currentGlobalState = globalState.getMyState();
-          if (currentGlobalState.encendido) {
+
             await provider.sendMedia(group.JID, fila.Imagen, fila.Mensaje);
-          } else {
-            await flowDynamic("envio cancelado 🚫");
-            await endflow();
-          }
 
           
 
