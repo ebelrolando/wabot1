@@ -6,7 +6,6 @@ const googleSheet = new GoogleSheetService(
   "17WUk7QlLnXODMruZcUQvWp1avaB0zuEH-dslKrxVfrw"
 );
 
-
 export const EnviosUnitarios = bot.addKeyword("#send one")
   .addAction(async (ctx, { flowDynamic, provider, endFlow, globalState }) => {
 
@@ -19,32 +18,37 @@ export const EnviosUnitarios = bot.addKeyword("#send one")
     if (coincidencias) {
       var digitos = coincidencias[1];
 
-      const fila = await googleSheet.getSpecificRow(digitos);
-      if (fila) {
-        const allGroups = await googleSheet.getAllRowsBySheetName(fila.Grupos);
-        await flowDynamic(`Iniciando Envios a *${allGroups.length}* Grupos`);
+      try {
+        const fila = await googleSheet.getSpecificRow(digitos);
 
+        if (fila) {
+          const allGroups = await googleSheet.getAllRowsBySheetName(fila.Grupos);
+          await flowDynamic(`Iniciando Envios a *${allGroups.length}* Grupos`);
 
-        for (const group of allGroups) {
-
-          if (fila.Imagen) {
-            await provider.sendMedia(group.JID, fila.Imagen, fila.Mensaje);
-          } else {
-            await provider.sendText(group.JID, fila.Mensaje);
+          for (const group of allGroups) {
+            try {
+              if (fila.Imagen) {
+                await provider.sendMedia(group.JID, fila.Imagen, fila.Mensaje);
+              } else {
+                await provider.sendText(group.JID, fila.Mensaje);
+              }
+              
+            } catch (error) {
+              console.error(`Error al enviar mensaje al grupo ${group.JID}:`, error.message);
+              
+            }
           }
 
-          
-
+          await flowDynamic("Envío Terminado ✅");
+        } else {
+          await flowDynamic('No se pudo obtener la fila.');
         }
-
-        await flowDynamic("Envio Terminado ✅");
-      } else {
-        await flowDynamic('No se pudo obtener la fila.');
+      } catch (error) {
+        console.error(`Error al obtener la fila específica ${digitos}:`, error.message);
+        
       }
-
-
-
     } else {
       await flowDynamic("No se encontraron coincidencias.");
     }
-  })
+    await endFlow();
+  });

@@ -17,24 +17,24 @@ export const IniciarEnvios = bot.addKeyword(regexMenu, { regex: true })
     const allRows = await googleSheet.getAllRows();
 
     for (const row of allRows) {
-
       const allGroups = await googleSheet.getAllRowsBySheetName(row.Grupos);
-      await flowDynamic(`Iniciando Envios a *${allGroups.length}* Grupos`);
+      await flowDynamic(`Iniciando Envíos a *${allGroups.length}* Grupos`);
+
       for (const group of allGroups) {
-          
-        if (row.Imagen) {
-          await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
-        } else {
-          await provider.sendText(group.JID, row.Mensaje);
+        try {
+          if (row.Imagen) {
+            await provider.sendMedia(group.JID, row.Imagen, row.Mensaje);
+          } else {
+            await provider.sendText(group.JID, row.Mensaje);
+          }
+        } catch (error) {
+          console.error(`Error al enviar mensaje al grupo ${group.JID}:`, error.message);
+        
         }
-
-
-
-        await delay(row.Delay);
-
       }
+      await delay(10000)
     }
 
-    await flowDynamic("Envios Terminados ✅");
-
+    await flowDynamic("Envíos Terminados ✅");
+    await endFlow();
   });
